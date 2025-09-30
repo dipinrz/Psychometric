@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 // import Header from "./components/Header";
 // import GaugeChart from "./components/GaugeChart";
 // import HealthCard from "./components/HealthCard";
@@ -87,8 +92,7 @@ function App() {
       },
     ],
     image_analysis: {
-      image_url:
-        "https://www.health.state.mn.us/communities/practice/resources/phqitoolbox/images/scatter_ex_atlanticcities_rsz.jpg",
+      image_url: "/image.png",
       ocr_confidence: 0.87,
       metadata_consistency_score: 0.42,
       suspicious_regions: [
@@ -111,37 +115,70 @@ function App() {
     fraud_detection: {
       fraud_score: 0.82,
       is_fraudulent: true,
-      flags: [
+      top_features: [
         {
-          code: "IMG_TAMPER",
-          description:
-            "Evidence of image manipulation in lab result values",
-          confidence: 0.91,
-          severity: "high",
+          feature: "glucose_avg_hba1c_diff",
+          mean_abs_shap: 0.545415,
+          description: "Discrepancy between glucose levels and HbA1c averages",
+          impact: "high",
         },
         {
-          code: "VALUE_MISMATCH",
-          description:
-            "OCR extracted values differ from reported numerical values",
-          confidence: 0.87,
-          severity: "high",
+          feature: "bp_hba1c_ratio",
+          mean_abs_shap: 0.529408,
+          description: "Abnormal blood pressure to HbA1c ratio",
+          impact: "high",
         },
         {
-          code: "AXIS_INCONSISTENCY",
-          description: "Graph axis scaling suggests altered data points",
-          confidence: 0.78,
-          severity: "medium",
+          feature: "tg_hdl_ratio",
+          mean_abs_shap: 0.516098,
+          description: "Triglyceride to HDL cholesterol ratio anomaly",
+          impact: "high",
         },
         {
-          code: "FONT_ANOMALY",
-          description:
-            "Inconsistent font styles detected in result labels",
-          confidence: 0.65,
-          severity: "medium",
+          feature: "bmi_bp_ratio",
+          mean_abs_shap: 0.44819,
+          description: "BMI to blood pressure ratio inconsistency",
+          impact: "medium",
+        },
+        {
+          feature: "bmi_hba1c_ratio",
+          mean_abs_shap: 0.436957,
+          description: "BMI to HbA1c ratio deviation",
+          impact: "medium",
+        },
+        {
+          feature: "weight_height_bmi_check",
+          mean_abs_shap: 0.369766,
+          description: "Weight-height BMI calculation mismatch",
+          impact: "medium",
+        },
+        {
+          feature: "cholesterol_hba1c_ratio",
+          mean_abs_shap: 0.336934,
+          description: "Cholesterol to HbA1c ratio irregularity",
+          impact: "medium",
+        },
+        {
+          feature: "ldl_hba1c_ratio",
+          mean_abs_shap: 0.2983,
+          description: "LDL to HbA1c ratio discrepancy",
+          impact: "low",
+        },
+        {
+          feature: "hdl_ldl_ratio",
+          mean_abs_shap: 0.283776,
+          description: "HDL to LDL ratio anomaly",
+          impact: "low",
+        },
+        {
+          feature: "cholesterol_bp_ratio",
+          mean_abs_shap: 0.260184,
+          description: "Cholesterol to blood pressure ratio inconsistency",
+          impact: "low",
         },
       ],
       explanation:
-        "High fraud score driven by image tampering evidence + mismatch between reported values and values extracted from the graph. OCR shows Hemoglobin ~11 g/dL and RBC ~3.9, but plot axis scaling suggests those points were altered. Additional suspicious regions indicate potential digital manipulation of result values.",
+        "High fraud probability primarily driven by physiological inconsistencies in metabolic ratios. Key indicators include abnormal glucose-HbA1c relationship, unusual blood pressure correlations, and triglyceride-HDL ratio anomalies. These biomarker patterns suggest potential data manipulation as they deviate from expected clinical correlations observed in authentic medical reports.",
     },
     generated_at: "2024-01-15T14:30:00Z",
     report_id: "FDR-2024-001567",
@@ -151,8 +188,7 @@ function App() {
 
   return (
     <Router>
-      <div >
-
+      <div>
         <Routes>
           {/* Default route */}
           <Route
@@ -171,7 +207,6 @@ function App() {
           {/* Redirect unknown routes to default */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-
       </div>
     </Router>
   );
