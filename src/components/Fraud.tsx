@@ -90,29 +90,29 @@ const FraudDetectionReport: React.FC<FraudDetectionReportProps> = ({ report }) =
           </div>
         </motion.div>
 
-        {/* Patient Information */}
+        {/* Patient Information - Made smaller */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl shadow-lg p-6 mb-6 border border-gray-200"
+          className="bg-white rounded-xl shadow-lg p-4 mb-6 border border-gray-200"
         >
-          <div className="flex items-center space-x-3 mb-4">
-            <FileText className="h-6 w-6 text-blue-600" />
-            <h2 className="text-xl font-bold text-gray-800">Patient Information</h2>
+          <div className="flex items-center space-x-2 mb-3">
+            <FileText className="h-5 w-5 text-blue-600" />
+            <h2 className="text-lg font-bold text-gray-800">Patient Information</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div>
-              <label className="text-sm font-medium text-gray-600">Patient ID</label>
-              <p className="text-gray-800 font-semibold">{report.patient.patient_id}</p>
+              <label className="text-xs font-medium text-gray-600">Patient ID</label>
+              <p className="text-gray-800 font-semibold text-sm">{report.patient.patient_id}</p>
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-600">Name</label>
-              <p className="text-gray-800 font-semibold">{report.patient.name}</p>
+              <label className="text-xs font-medium text-gray-600">Name</label>
+              <p className="text-gray-800 font-semibold text-sm">{report.patient.name}</p>
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-600">Age & Gender</label>
-              <p className="text-gray-800 font-semibold">{report.patient.age} years, {report.patient.gender}</p>
+              <label className="text-xs font-medium text-gray-600">Age & Gender</label>
+              <p className="text-gray-800 font-semibold text-sm">{report.patient.age} years, {report.patient.gender}</p>
             </div>
           </div>
         </motion.div>
@@ -124,46 +124,56 @@ const FraudDetectionReport: React.FC<FraudDetectionReportProps> = ({ report }) =
           transition={{ delay: 0.3 }}
           className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"
         >
-          {/* Lab Metrics */}
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+          {/* Lab Metrics - Scrollable */}
+          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 flex flex-col">
             <div className="flex items-center space-x-3 mb-4">
               <Activity className="h-6 w-6 text-blue-600" />
               <h2 className="text-xl font-bold text-gray-800">Lab Metrics</h2>
             </div>
-            <div className="space-y-4">
-              {report.metrics.map((metric: any, index: number) => (
-                <div key={index} className="flex justify-between items-center p-3 border border-gray-200 rounded-lg">
-                  <div>
-                    <p className="font-semibold text-gray-800">{metric.display_name}</p>
-                    <p className="text-sm text-gray-600">{metric.value} {metric.units}</p>
+            <div className="flex-1 overflow-y-auto max-h-80"> {/* Added max height and scroll */}
+              <div className="space-y-3 pr-2"> {/* Reduced spacing and added padding for scrollbar */}
+                {report.metrics.map((metric: any, index: number) => (
+                  <div key={index} className="flex justify-between items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-gray-800 truncate">{metric.display_name}</p>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <p className="text-sm text-gray-600">
+                          {metric.value} {metric.units}
+                        </p>
+                        <span className="text-xs text-gray-400">•</span>
+                        <p className="text-xs text-gray-500 truncate">
+                          {metric.normal_range}
+                        </p>
+                      </div>
+                    </div>
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap flex-shrink-0 ml-3 ${getMetricStatusColor(metric.status)}`}>
+                      {metric.status.replace('_', ' ')}
+                    </span>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getMetricStatusColor(metric.status)}`}>
-                    {metric.status.replace('_', ' ')}
-                  </span>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Image Analysis */}
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+          {/* Image Analysis - Updated to show only image */}
+          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 flex flex-col">
             <div className="flex items-center space-x-3 mb-4">
               <Image className="h-6 w-6 text-blue-600" />
               <h2 className="text-xl font-bold text-gray-800">Image Analysis</h2>
             </div>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">OCR Confidence</span>
-                <span className="font-semibold text-gray-800">{(report.image_analysis.ocr_confidence * 100).toFixed(0)}%</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Metadata Consistency</span>
-                <span className="font-semibold text-gray-800">{(report.image_analysis.metadata_consistency_score * 100).toFixed(0)}%</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Suspicious Regions</span>
-                <span className="font-semibold text-red-600">{report.image_analysis.suspicious_regions.length}</span>
-              </div>
+            <div className="flex-1 flex justify-center items-center min-h-64"> {/* Added min height */}
+              {report.image_analysis.image_url ? (
+                <img 
+                  src={report.image_analysis.image_url} 
+                  alt="Lab report analysis"
+                  className="max-w-full h-auto rounded-lg border border-gray-200 max-h-64 object-contain"
+                />
+              ) : (
+                <div className="text-gray-500 text-center py-8">
+                  <Image className="h-12 w-12 mx-auto mb-2 text-gray-400" />
+                  <p>No image available</p>
+                </div>
+              )}
             </div>
           </div>
         </motion.div>
@@ -197,60 +207,19 @@ const FraudDetectionReport: React.FC<FraudDetectionReportProps> = ({ report }) =
           </div>
         </motion.div>
 
-        {/* Explanation & Recommended Actions */}
+        {/* Explanation - Single column since we removed the other sections */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"
+          className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 mb-6"
         >
-          {/* Explanation */}
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-            <div className="flex items-center space-x-3 mb-4">
-              <Eye className="h-6 w-6 text-blue-600" />
-              <h2 className="text-xl font-bold text-gray-800">Analysis Explanation</h2>
-            </div>
-            <p className="text-gray-700 leading-relaxed">{report.fraud_detection.explanation}</p>
+          <div className="flex items-center space-x-3 mb-4">
+            <Eye className="h-6 w-6 text-blue-600" />
+            <h2 className="text-xl font-bold text-gray-800">Analysis Explanation</h2>
           </div>
-
-          {/* Recommended Actions */}
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-            <div className="flex items-center space-x-3 mb-4">
-              <Clock className="h-6 w-6 text-blue-600" />
-              <h2 className="text-xl font-bold text-gray-800">Recommended Actions</h2>
-            </div>
-            <ul className="space-y-2">
-              {report.fraud_detection.recommended_action.map((action: string, index: number) => (
-                <li key={index} className="flex items-start space-x-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
-                  <span className="text-gray-700">{action}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <p className="text-gray-700 leading-relaxed">{report.fraud_detection.explanation}</p>
         </motion.div>
-
-        {/* Related Reports */}
-        {report.related_reports && report.related_reports.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="bg-white rounded-xl shadow-lg p-6 border border-gray-200"
-          >
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Related Reports</h2>
-            <div className="space-y-3">
-              {report.related_reports.map((related: any, index: number) => (
-                <div key={index} className="flex justify-between items-center p-3 border border-gray-200 rounded-lg">
-                  <span className="font-medium text-gray-800">{related.id}</span>
-                  <span className="text-sm text-gray-600">
-                    Similarity: {(related.similarity_score * 100).toFixed(0)}%
-                  </span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
 
         {/* Footer */}
         <motion.div

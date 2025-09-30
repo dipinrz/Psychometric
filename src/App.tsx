@@ -1,9 +1,10 @@
 import React from "react";
-import Header from "./components/Header";
-import GaugeChart from "./components/GaugeChart";
-import HealthCard from "./components/HealthCard";
-import Recommendations from "./components/Recommendations";
-import Footer from "./components/Footer";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+// import Header from "./components/Header";
+// import GaugeChart from "./components/GaugeChart";
+// import HealthCard from "./components/HealthCard";
+// import Recommendations from "./components/Recommendations";
+// import Footer from "./components/Footer";
 import Build from "./components/Build";
 import FraudDetectionDashboard from "./components/FraudDetection";
 import FraudDetectionDashboardAPI from "./components/FraudDetectionAPi";
@@ -30,218 +31,149 @@ const healthMetrics = [
     score: 85,
     suggestion:
       "No major cardiovascular events. Regular check-ups recommended.",
-    // fullWidth: true
   },
 ];
 
 function App() {
+  const reportData = {
+    patient: {
+      patient_id: "PT-2024-78942",
+      name: "John M. Smith",
+      age: 42,
+      gender: "Male",
+    },
+    metrics: [
+      {
+        display_name: "Hemoglobin",
+        value: 11.2,
+        units: "g/dL",
+        status: "low",
+        normal_range: "13.5-17.5 g/dL",
+      },
+      {
+        display_name: "Red Blood Cells",
+        value: 3.9,
+        units: "million/µL",
+        status: "low",
+        normal_range: "4.5-5.9 million/µL",
+      },
+      {
+        display_name: "White Blood Cells",
+        value: 6.8,
+        units: "thousand/µL",
+        status: "normal",
+        normal_range: "4.5-11.0 thousand/µL",
+      },
+      {
+        display_name: "Platelets",
+        value: 245,
+        units: "thousand/µL",
+        status: "normal",
+        normal_range: "150-450 thousand/µL",
+      },
+      {
+        display_name: "Glucose",
+        value: 98,
+        units: "mg/dL",
+        status: "normal",
+        normal_range: "70-100 mg/dL",
+      },
+      {
+        display_name: "Cholesterol",
+        value: 189,
+        units: "mg/dL",
+        status: "slightly_high",
+        normal_range: "<200 mg/dL",
+      },
+    ],
+    image_analysis: {
+      image_url:
+        "https://www.health.state.mn.us/communities/practice/resources/phqitoolbox/images/scatter_ex_atlanticcities_rsz.jpg",
+      ocr_confidence: 0.87,
+      metadata_consistency_score: 0.42,
+      suspicious_regions: [
+        {
+          region_id: "reg_001",
+          coordinates: { x: 145, y: 89, width: 120, height: 45 },
+          confidence: 0.91,
+          description: "Potential value tampering in hemoglobin results",
+        },
+        {
+          region_id: "reg_002",
+          coordinates: { x: 280, y: 156, width: 95, height: 38 },
+          confidence: 0.76,
+          description: "Inconsistent font rendering in RBC values",
+        },
+      ],
+      image_hash: "a7f1c4d89e2b356f",
+      format_analysis: "JPEG with potential compression artifacts",
+    },
+    fraud_detection: {
+      fraud_score: 0.82,
+      is_fraudulent: true,
+      flags: [
+        {
+          code: "IMG_TAMPER",
+          description:
+            "Evidence of image manipulation in lab result values",
+          confidence: 0.91,
+          severity: "high",
+        },
+        {
+          code: "VALUE_MISMATCH",
+          description:
+            "OCR extracted values differ from reported numerical values",
+          confidence: 0.87,
+          severity: "high",
+        },
+        {
+          code: "AXIS_INCONSISTENCY",
+          description: "Graph axis scaling suggests altered data points",
+          confidence: 0.78,
+          severity: "medium",
+        },
+        {
+          code: "FONT_ANOMALY",
+          description:
+            "Inconsistent font styles detected in result labels",
+          confidence: 0.65,
+          severity: "medium",
+        },
+      ],
+      explanation:
+        "High fraud score driven by image tampering evidence + mismatch between reported values and values extracted from the graph. OCR shows Hemoglobin ~11 g/dL and RBC ~3.9, but plot axis scaling suggests those points were altered. Additional suspicious regions indicate potential digital manipulation of result values.",
+    },
+    generated_at: "2024-01-15T14:30:00Z",
+    report_id: "FDR-2024-001567",
+    analysis_timestamp: "2024-01-15T14:28:32Z",
+    model_version: "v2.3.1-fraud-detector",
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-6">
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl p-8 shadow-lg">
-        {/* <Header 
-        
-          patientName="Alex Morgan" 
-          age={42} 
-          date="May 07, 2025" 
-        /> */}
+    <Router>
+      <div >
 
-        <div className="text-center mb-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            OVERALL CARDIOVASCULAR RISK
-          </h3>
-          <div className="relative inline-block">
-            <GaugeChart percentage={42} />
-          </div>
-          <div className="mt-3 text-sm text-orange-600">
-            Moderate risk: follow up in 3 months
-          </div>
-        </div>
+        <Routes>
+          {/* Default route */}
+          <Route
+            path="/"
+            element={<FraudDetectionReport report={reportData} />}
+          />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          {healthMetrics.map((metric, index) => (
-            <HealthCard
-              key={index}
-              title={metric.title}
-              score={metric.score}
-              suggestion={metric.suggestion}
-              // fullWidth={metric.fullWidth}
-            />
-          ))}
-        </div>
+          {/* Other routes */}
+          <Route path="/build" element={<Build />} />
+          <Route path="/dashboard" element={<FraudDetectionDashboard />} />
+          <Route
+            path="/dashboard-api"
+            element={<FraudDetectionDashboardAPI />}
+          />
 
-        {/* <Recommendations /> */}
-        {/* <Footer /> */}
+          {/* Redirect unknown routes to default */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+
       </div>
-      <Build />
-      <FraudDetectionDashboard />
-      <FraudDetectionDashboardAPI />
-      <FraudDetectionReport
-        report={{
-          id: "report_0001",
-          type: "fraud_detection_lab_report",
-          generated_at: "2025-09-29T15:22:10Z",
-          patient: {
-            patient_id: "pat_54231",
-            name: "Test User",
-            age: 58,
-            gender: "male",
-          },
-          image: {
-            s3_url:
-              "https://s3.amazonaws.com/your-bucket/reports/graph_report_0001.png",
-            filename: "graph_report_0001.png",
-            mime_type: "image/png",
-            width: 1200,
-            height: 800,
-            hash_sha256:
-              "3f7c2a8b7a1c9d5e9b0f14a2a9d8f6c3e5b1c9d7f2a4e6b8c9d0a1b2c3d4e5f6",
-            graph_meta: {
-              chart_type: "line",
-              x_axis_label: "Date",
-              y_axis_label: "Value",
-              series: ["Hemoglobin", "RBC"],
-              captured_at: "2025-09-29T15:20:23Z",
-            },
-          },
-          metrics: [
-            {
-              name: "RBC",
-              display_name: "Red Blood Cells",
-              value: 3.9,
-              units: "10^6/µL",
-              normal_range: {
-                min: 4.2,
-                max: 5.9,
-                population: "male_adult",
-              },
-              status: "low",
-              measured_at: "2025-09-29T15:18:00Z",
-              source: "reported_value",
-            },
-            {
-              name: "Hemoglobin",
-              display_name: "Hemoglobin (Hb)",
-              value: 11.0,
-              units: "g/dL",
-              normal_range: {
-                min: 13.5,
-                max: 17.5,
-                population: "male_adult",
-              },
-              status: "low",
-              measured_at: "2025-09-29T15:18:00Z",
-              source: "reported_value",
-            },
-            {
-              name: "HbA1c",
-              display_name: "HbA1c",
-              value: 5.7,
-              units: "%",
-              normal_range: {
-                min: 4.0,
-                max: 5.6,
-                population: "general",
-              },
-              status: "slightly_high",
-              measured_at: "2025-09-29T15:18:00Z",
-              source: "reported_value",
-            },
-            {
-              name: "WBC",
-              display_name: "White Blood Cells",
-              value: 6.2,
-              units: "10^3/µL",
-              normal_range: {
-                min: 4.0,
-                max: 11.0,
-                population: "adult",
-              },
-              status: "normal",
-              measured_at: "2025-09-29T15:18:00Z",
-              source: "reported_value",
-            },
-          ],
-          image_analysis: {
-            detected_text:
-              "Hemoglobin: 11 g/dL\\nRBC: 3.9 x10^6/µL\\nHbA1c: 5.7%",
-            ocr_confidence: 0.92,
-            detected_plot_series: [
-              {
-                name: "Hemoglobin",
-                points_detected: 12,
-                value_range_in_plot: {
-                  min: 10,
-                  max: 15,
-                },
-              },
-              {
-                name: "RBC",
-                points_detected: 12,
-                value_range_in_plot: {
-                  min: 3.8,
-                  max: 5.2,
-                },
-              },
-            ],
-            metadata_consistency_score: 0.71,
-            suspicious_regions: [
-              {
-                x: 820,
-                y: 120,
-                w: 220,
-                h: 80,
-                reason: "visual artifact / splice-like edge",
-                confidence: 0.84,
-              },
-            ],
-          },
-          fraud_detection: {
-            is_fraudulent: true,
-            fraud_score: 0.86,
-            flags: [
-              {
-                code: "IMG_TAMPER",
-                description:
-                  "Image shows signs of tampering (edge blending and inconsistent noise profile).",
-                confidence: 0.84,
-              },
-              {
-                code: "META_MISMATCH",
-                description:
-                  "Reported numeric values do not fully match values inferred from the graph image OCR & plot extraction.",
-                confidence: 0.78,
-              },
-              {
-                code: "UNUSUAL_TIMESTAMP",
-                description:
-                  "Image capture timestamp is suspicious relative to claimed sample collection time.",
-                confidence: 0.6,
-              },
-            ],
-            explanation:
-              "High fraud score driven by image tampering evidence + mismatch between reported values and values extracted from the graph. OCR shows Hemoglobin ~11 g/dL and RBC ~3.9, but plot axis scaling suggests those points were altered.",
-            recommended_action: [
-              "Flag report for manual review by clinical team",
-              "Request original lab files / DICOM / raw instrument output from source",
-              "Compare image hash against previously submitted reports for duplicates",
-            ],
-          },
-          related_reports: [
-            {
-              id: "report_0001_dupA",
-              similarity_score: 0.92,
-              match_reason: "identical image hash with minor metadata changes",
-            },
-          ],
-          ui_summaries: {
-            short_text:
-              "Potential fraud detected — image tampering and value mismatch (fraud_score: 0.86). Manual review recommended.",
-            detailed_text:
-              "Image tampering detected with high confidence (0.84). OCR and plot extraction produce RBC=3.9 and Hb=11.0 which are inconsistent with claimed normal ranges. Please escalate.",
-          },
-        }}
-      />
-    </div>
+    </Router>
   );
 }
 
