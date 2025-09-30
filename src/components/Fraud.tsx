@@ -142,7 +142,22 @@ const FraudDetectionReport: React.FC<FraudDetectionReportProps> = ({
             </div>
           </div>
         </motion.div>
-
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 mb-6"
+        >
+          <div className="flex items-center space-x-3 mb-4">
+            <Eye className="h-6 w-6 text-blue-600" />
+            <h2 className="text-xl font-bold text-gray-800">
+              Analysis Explanation
+            </h2>
+          </div>
+          <p className="text-gray-700 leading-relaxed">
+            {report.fraud_detection.explanation}
+          </p>
+        </motion.div>
         {/* Patient Information - Made smaller */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -180,23 +195,6 @@ const FraudDetectionReport: React.FC<FraudDetectionReportProps> = ({
               </p>
             </div>
           </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 mb-6"
-        >
-          <div className="flex items-center space-x-3 mb-4">
-            <Eye className="h-6 w-6 text-blue-600" />
-            <h2 className="text-xl font-bold text-gray-800">
-              Analysis Explanation
-            </h2>
-          </div>
-          <p className="text-gray-700 leading-relaxed">
-            {report.fraud_detection.explanation}
-          </p>
         </motion.div>
 
         {/* Metrics Grid */}
@@ -255,7 +253,7 @@ const FraudDetectionReport: React.FC<FraudDetectionReportProps> = ({
             <div className="flex items-center space-x-3 mb-4">
               <Image className="h-6 w-6 text-blue-600" />
               <h2 className="text-xl font-bold text-gray-800">
-                Image Analysis
+                Visualization{" "}
               </h2>
             </div>
             <div className="flex-1 flex justify-center items-center min-h-64">
