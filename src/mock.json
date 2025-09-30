@@ -1,0 +1,83 @@
+{
+  "data": {
+    "classification": {
+      "status": "Re-Medical",
+      "diseases": [
+        {
+          "summary": "Based on the guidelines, individuals with no additional conditions and who are asymptomatic can generally be deemed fit for occupational duties, provided they can meet the mobility requirements and perform necessary tasks. Regular reviews are essential to ensure ongoing fitness for work, especially in roles requiring physical demands or emergency response capabilities.",
+          "risk": "low",
+          "name": "No additional conditions",
+          "sections": {},
+          "parameters": []
+        },
+        {
+          "summary": "Individuals with Type 2 Diabetes Mellitus (T2DM) on insulin treatment are generally unacceptable for high-risk occupations such as emergency response roles, while those with stable, well-controlled T2DM without complications may be considered for employment after thorough assessment. Regular monitoring and strict adherence to guidelines regarding hypoglycaemia awareness and blood glucose control are essential for maintaining occupational fitness in this population.",
+          "risk": "high",
+          "name": "Diabetes",
+          "sections": {
+            "10.4.3.5": 20,
+            "11.4.3.10": 58
+          },
+          "parameters": []
+        },
+        {
+          "summary": "Individuals with well-controlled hypertension are generally acceptable for employment, provided there are no complications or uncontrolled symptoms. However, those with complicated or uncontrolled hypertension should undergo further assessment to determine their fitness for work, especially in roles requiring physical exertion or emergency response.",
+          "risk": "medium",
+          "name": "Hypertension",
+          "sections": {
+            "10.6.3": 26
+          },
+          "parameters": []
+        }
+      ],
+      "explanation": "The candidate has suspected conditions of hypertension and diabetes that have not been confirmed, which necessitates further evaluation to determine their impact on fitness for duty. Without confirmation of these conditions and their management status, a final decision on fitness cannot be made. Additional tests or specialist reviews are required to assess the candidate's ability to safely perform the duties of a welder."
+    },
+    "cvd": {
+      "prediction": {
+        "Predicted_Risk_Category": "High Risk",
+        "Confidence": 0.9999
+      },
+      "Explainability": {
+        "top_features": [
+          {
+            "feature": "Age (years)",
+            "value": 60,
+            "contribution": 1.9725,
+            "percentage_contribution": 31.86,
+            "direction": "increases_risk"
+          },
+          {
+            "feature": "Systolic_BP (mmHg)",
+            "value": 185,
+            "contribution": 0.5412,
+            "percentage_contribution": 8.74,
+            "direction": "increases_risk"
+          },
+          {
+            "feature": "Fasting_Glucose (mg/dL)",
+            "value": 140,
+            "contribution": 0.5092,
+            "percentage_contribution": 8.22,
+            "direction": "increases_risk"
+          },
+          {
+            "feature": "Triglycerides (mg/dL)",
+            "value": 250,
+            "contribution": 0.4922,
+            "percentage_contribution": 7.95,
+            "direction": "increases_risk"
+          },
+          {
+            "feature": "BMI (kg/m2)",
+            "value": 32,
+            "contribution": 0.3689,
+            "percentage_contribution": 5.96,
+            "direction": "increases_risk"
+          }
+        ]
+      },
+      "feedback": "Based on the patient's high-risk status and the contributing factors you've provided, it is advisable for the patient to schedule a medical checkup every 3 months.\n\n### Reason for This Timing:\n1. **Age**: At 60 years old, the patient is at an increased risk for various health issues, including cardiovascular disease and diabetes. Regular checkups can help monitor these risks.\n  \n2. **High Systolic Blood Pressure**: A reading of 185 mmHg indicates hypertension, which requires close monitoring and management to prevent complications like heart disease or stroke.\n\n3. **Elevated Fasting Glucose**: A fasting glucose level of 140 mg/dL suggests the patient may be at risk for diabetes. Regular checkups will allow for monitoring of blood sugar levels and early intervention if necessary.\n\n4. **High Triglycerides**: With a level of 250 mg/dL, this can increase the risk of heart disease. Regular checkups can help manage and lower these levels through lifestyle changes or medications.\n\n5. **Increased BMI**: A BMI of 32 indicates obesity, which is a risk factor for many chronic conditions. Regular checkups can help track weight and provide guidance on healthy lifestyle changes.\n\nIn summary, coming in every 3 months will allow for timely monitoring and intervention, helping to manage these risk factors effectively.",
+      "Recommendation": "To help reduce your risk, focus on adopting a healthier lifestyle. Aim to maintain a balanced diet rich in fruits, vegetables, whole grains, and lean proteins while reducing sugar and saturated fats. Regular exercise, such as walking for at least 30 minutes most days, can also be beneficial. Additionally, monitor your blood pressure, glucose, and lipid levels regularly, and consider discussing medication or supplements with your healthcare provider if necessary. Lastly, ensure you have regular check-ups to keep track of your overall health."
+    }
+  }
+}
