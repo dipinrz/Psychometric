@@ -14,6 +14,7 @@ import Build from "./components/Build";
 import FraudDetectionDashboard from "./components/FraudDetection";
 import FraudDetectionDashboardAPI from "./components/FraudDetectionAPi";
 import FraudDetectionReport from "./components/Fraud";
+import AnomalyDetectionResults from "./components/Test/Test.tsx";
 
 const healthMetrics = [
   {
@@ -193,6 +194,11 @@ function App() {
           {/* Default route */}
           <Route
             path="/"
+            element={<AnomalyDetectionResults/>}
+          />
+
+           <Route
+            path="/old"
             element={<FraudDetectionReport report={reportData} />}
           />
 
