@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
   AlertTriangle,
@@ -16,8 +16,11 @@ import {
   Brain,
   Shield,
   BarChart3,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
 } from "lucide-react";
-import { useState } from "react";
 import axios from "axios";
 
 const PsychometricTestAnalytics = () => {
@@ -37,7 +40,7 @@ const PsychometricTestAnalytics = () => {
 
     const formData = new FormData();
     formData.append("file", file);
-    
+
     try {
       const result = await axios.post(
         "https://psychometric-analysis.heuristics.ae/predict?return_csv=false&top_n=3",
@@ -499,8 +502,17 @@ const SinglePatientView = ({ patient }: { patient: any }) => {
   );
 };
 
-// Multiple Patients Summary View
+// Multiple Patients Summary View with Pagination
 const MultiplePatientsView = ({ patients }: { patients: any[] }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [patientsPerPage, setPatientsPerPage] = useState(10);
+
+  // Calculate pagination values
+  const totalPages = Math.ceil(patients.length / patientsPerPage);
+  const startIndex = (currentPage - 1) * patientsPerPage;
+  const endIndex = startIndex + patientsPerPage;
+  const currentPatients = patients.slice(startIndex, endIndex);
+
   const highRiskCount = patients.filter(
     (p) => p.Predicted_Suicide_risk?.toLowerCase() === "high"
   ).length;
@@ -510,6 +522,29 @@ const MultiplePatientsView = ({ patients }: { patients: any[] }) => {
   const lowRiskCount = patients.filter(
     (p) => p.Predicted_Suicide_risk?.toLowerCase() === "low"
   ).length;
+
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      const startPage = Math.max(1, currentPage - 2);
+      const endPage = Math.min(totalPages, currentPage + 2);
+
+      if (startPage > 1) pages.push(1);
+      if (startPage > 2) pages.push("...");
+
+      for (let i = startPage; i <= endPage; i++) pages.push(i);
+
+      if (endPage < totalPages - 1) pages.push("...");
+      if (endPage < totalPages) pages.push(totalPages);
+    }
+
+    return pages;
+  };
 
   return (
     <div className="space-y-6">
@@ -543,6 +578,31 @@ const MultiplePatientsView = ({ patients }: { patients: any[] }) => {
         </div>
       </div>
 
+      {/* Patients Per Page Selector */}
+      <div className="flex justify-between items-center bg-white rounded-lg p-4 border border-gray-200">
+        <div className="flex items-center space-x-4">
+          <span className="text-sm font-medium text-gray-700">Show:</span>
+          <select
+            value={patientsPerPage}
+            onChange={(e) => {
+              setPatientsPerPage(Number(e.target.value));
+              setCurrentPage(1);
+            }}
+            className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value={5}>5 patients</option>
+            <option value={10}>10 patients</option>
+            <option value={20}>20 patients</option>
+            <option value={50}>50 patients</option>
+          </select>
+        </div>
+
+        <div className="text-sm text-gray-600">
+          Showing {startIndex + 1}-{Math.min(endIndex, patients.length)} of{" "}
+          {patients.length} patients
+        </div>
+      </div>
+
       {/* Patients Table */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
@@ -570,7 +630,7 @@ const MultiplePatientsView = ({ patients }: { patients: any[] }) => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {patients.map((patient, index) => (
+              {currentPatients.map((patient, index) => (
                 <PatientTableRow
                   key={patient.PATIENT_ID || index}
                   patient={patient}
@@ -580,6 +640,92 @@ const MultiplePatientsView = ({ patients }: { patients: any[] }) => {
           </table>
         </div>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-lg p-4 border border-gray-200">
+          <div className="text-sm text-gray-600">
+            Page {currentPage} of {totalPages}
+          </div>
+
+          <div className="flex items-center space-x-2">
+            {/* First Page */}
+            <button
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
+              className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+            >
+              <ChevronsLeft className="h-4 w-4" />
+            </button>
+
+            {/* Previous Page */}
+            <button
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+
+            {/* Page Numbers */}
+            <div className="flex space-x-1">
+              {getPageNumbers().map((page, index) => (
+                <button
+                  key={index}
+                  onClick={() =>
+                    typeof page === "number" && setCurrentPage(page)
+                  }
+                  className={`min-w-[40px] h-10 rounded-lg border transition-colors ${
+                    page === currentPage
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : page === "..."
+                      ? "border-transparent cursor-default"
+                      : "border-gray-300 hover:bg-gray-50 text-gray-700"
+                  }`}
+                  disabled={page === "..."}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+
+            {/* Next Page */}
+            <button
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+
+            {/* Last Page */}
+            <button
+              onClick={() => setCurrentPage(totalPages)}
+              disabled={currentPage === totalPages}
+              className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+            >
+              <ChevronsRight className="h-4 w-4" />
+            </button>
+          </div>
+
+          {/* Items per page selector for mobile */}
+          <div className="sm:hidden w-full">
+            <select
+              value={patientsPerPage}
+              onChange={(e) => {
+                setPatientsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value={5}>5 per page</option>
+              <option value={10}>10 per page</option>
+              <option value={20}>20 per page</option>
+              <option value={50}>50 per page</option>
+            </select>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
