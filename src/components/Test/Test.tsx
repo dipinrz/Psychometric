@@ -37,7 +37,7 @@ const AnomalyDetectionAnalytics = () => {
 
     try {
       const result = await axios.post(
-        "http://51.112.148.129:8089/predict",
+        "/api/predict",
         formData,
         {
           headers: {
