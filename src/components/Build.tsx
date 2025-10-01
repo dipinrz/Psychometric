@@ -74,6 +74,144 @@ const Build: React.FC = () => {
       "The candidate has hypertension, which is a confirmed condition. The candidate's systolic blood pressure is 150 mmHg, which is above the threshold of 140 mmHg. According to the guidelines, hypertension above 140/90 requires review. The candidate's hypertension is also a job-specific risk factor for pilots, as they must maintain controlled blood pressure. Therefore, the candidate is not fit for the job and needs to be re-evaluated after treatment.",
   };
 
+  const data2 = {
+    cvd: {
+      feedback:
+        "Based on the moderate risk assessment and the contributing factors you've shared, here are my recommendations:\n\n1. **Follow-Up Checkup Timing:** The patient should schedule a medical checkup in **3 to 6 months**.\n\n2. **Reason for This Timing:** Regular checkups are essential to monitor the patient's health, especially considering the factors that are contributing to their moderate risk. Specifically, the patient's BMI is at the higher end of normal, and their HbA1c levels indicate they are at the threshold of prediabetes. Additionally, maintaining a close watch on blood pressure is important since both systolic and diastolic readings are contributing to the risk. A checkup within this timeframe allows for timely intervention if any changes occur and helps in managing any potential health issues early on.\n\nEncouraging a healthy lifestyle, including a balanced diet and regular physical activity, can also play a significant role in reducing risk factors.",
+      prediction: {
+        Confidence: 0.5485,
+        Predicted_Risk_Category: "Moderate Risk",
+      },
+      Explainability: {
+        top_features: [
+          {
+            value: 34,
+            feature: "Age (years)",
+            direction: "reduces_risk",
+            contribution: -0.9225,
+            percentage_contribution: 21.98,
+          },
+          {
+            value: 24.9,
+            feature: "BMI (kg/m2)",
+            direction: "increases_risk",
+            contribution: 0.4804,
+            percentage_contribution: 11.45,
+          },
+          {
+            value: 5.7,
+            feature: "HbA1c (%)",
+            direction: "increases_risk",
+            contribution: 0.2161,
+            percentage_contribution: 5.15,
+          },
+          {
+            value: 120,
+            feature: "Systolic_BP (mmHg)",
+            direction: "increases_risk",
+            contribution: 0.2152,
+            percentage_contribution: 5.13,
+          },
+          {
+            value: 80,
+            feature: "Diastolic_BP (mmHg)",
+            direction: "increases_risk",
+            contribution: 0.102,
+            percentage_contribution: 2.43,
+          },
+        ],
+      },
+      Recommendation:
+        "To help reduce your moderate risk, focus on maintaining a healthy lifestyle. Aim for a balanced diet rich in fruits, vegetables, whole grains, and lean proteins, while reducing processed foods and sugars. Regular physical activity, such as brisk walking or cycling for at least 150 minutes a week, can also be beneficial. Additionally, monitor your blood pressure and blood sugar levels, and consider discussing your BMI and HbA1c with your healthcare provider for personalized advice.",
+    },
+    classification: {
+      status: "Re-Medical",
+      diseases: [
+        {
+          name: "infectious disease",
+          risk: "high",
+          summary:
+            "Individuals with active infectious diseases, particularly those that pose a risk of transmission, are not fit for work until they are confirmed non-infectious and have completed appropriate treatment. This is critical in maintaining workplace safety and preventing outbreaks, especially in roles that require close contact with others or involve food handling.",
+          sections: {
+            "10.14": 38,
+          },
+          parameters: [
+            {
+              observed_value: "0.273",
+              reference_range:
+                "NEGATIVE : < 0.90\nGRAY ZONE : 0.90 - 1.00\nREACTIVE : > /= 1.00",
+            },
+          ],
+        },
+        {
+          name: "Immunodeficiency Virus Infection (HIV)",
+          risk: "high",
+          summary:
+            "Individuals tested positive for HIV are generally not suitable for employment due to UAE residency visa regulations, which directly impacts their occupational fitness for roles requiring high levels of health and safety. Therefore, candidates with HIV must be carefully assessed, and those who test positive will be rejected from employment, limiting their opportunities in the workforce.",
+          sections: {
+            "10.14.1": 38,
+          },
+          parameters: [
+            {
+              observed_value: "0.273",
+              reference_range:
+                "NEGATIVE : < 0.90\nGRAY ZONE : 0.90 - 1.00\nREACTIVE : > /= 1.00",
+            },
+          ],
+        },
+        {
+          name: "Hepatitis B",
+          risk: "medium",
+          summary:
+            "Individuals with chronic Hepatitis B may face restrictions on occupational fitness, particularly in roles such as food handling or healthcare, due to the risk of transmission and the need for ongoing medical evaluation. If the individual has documented evidence of adequate seroconversion following vaccination, they may be deemed fit for work; otherwise, further assessment is required before returning to duties.",
+          sections: {
+            "10.8.12": 30,
+            "11.7.3.1": 62,
+          },
+          parameters: [
+            {
+              observed_value: "0.394",
+              reference_range:
+                "NON REACTIVE : < 0.9\nBORDERLINE : 0.9-1.0\nMORE THAN 1.0 REACTIVE",
+            },
+          ],
+        },
+        {
+          name: "chronic communicable disease",
+          risk: "high",
+          summary:
+            "Individuals with chronic communicable diseases must undergo a thorough assessment to evaluate the risk of transmission and the impact on their ability to perform job tasks safely. Until deemed non-infectious and fit for work, they should be restricted from roles that may pose a risk to others, particularly in remote or offshore settings.",
+          sections: {
+            "10.14": 38,
+          },
+          parameters: [
+            {
+              observed_value: "0.273",
+              reference_range:
+                "NEGATIVE : < 0.90\nGRAY ZONE : 0.90 - 1.00\nREACTIVE : > /= 1.00",
+            },
+          ],
+        },
+        {
+          name: "Hepatitis C",
+          risk: "high",
+          summary:
+            "The presence of Hepatitis C indicates a potential risk for occupational fitness, particularly for roles such as healthcare workers and emergency responders, where active infection could pose a risk to others. Individuals with untreated chronic Hepatitis C should not be placed in high-risk job categories until further medical evaluation confirms their fitness for duty.",
+          sections: {
+            "10.8.13": 32,
+          },
+          parameters: [
+            {
+              observed_value: "0.034",
+              reference_range: "NEGATIVE : < 1.0\nREACTIVE : > /= 1.0",
+            },
+          ],
+        },
+      ],
+      explanation:
+        "The candidate's medical assessment indicates potential concerns regarding Hepatitis B, Hepatitis C, and HIV, as these conditions require further evaluation based on the abnormal test results. Specific values for these tests are not provided, necessitating additional information to determine the candidate's fitness for the role of Telephone Operator. Given the potential implications of these infectious diseases, a specialist assessment is recommended to clarify the candidate's health status. Therefore, the classification is Re-medical pending further evaluation.",
+    },
+  };
   const [data, setData] = useState<any>({
     classification: {
       status: "Re-Medical",
@@ -105,12 +243,12 @@ const Build: React.FC = () => {
           sections: {
             "10.6.3": 26,
           },
-          parameters: [ 
-          "LDL cholesterol > 160 mg/dL (recommended < 100 mg/dL)",
-          "HDL cholesterol < 40 mg/dL (recommended > 50 mg/dL)",
-          "Triglycerides > 200 mg/dL (recommended < 150 mg/dL)",
-          "Resting heart rate > 100 bpm (recommended 60–80 bpm)",
-        ],
+          parameters: [
+            "LDL cholesterol > 160 mg/dL (recommended < 100 mg/dL)",
+            "HDL cholesterol < 40 mg/dL (recommended > 50 mg/dL)",
+            "Triglycerides > 200 mg/dL (recommended < 150 mg/dL)",
+            "Resting heart rate > 100 bpm (recommended 60–80 bpm)",
+          ],
         },
       ],
       explanation:
@@ -118,7 +256,7 @@ const Build: React.FC = () => {
     },
     cvd: {
       prediction: {
-        Predicted_Risk_Category: "High Risk",
+        Predicted_Risk_Category: "Moderate Risk",
         Confidence: 0.98,
       },
       Explainability: {
@@ -153,23 +291,23 @@ const Build: React.FC = () => {
           },
           {
             feature: "BMI (kg/m2)",
-            value: 32,  
+            value: 32,
             contribution: 0.3689,
             percentage_contribution: 5.96,
             direction: "increases_risk",
           },
         ],
       },
-        feedback:
-          "Based on the patient's high-risk status and the contributing factors you've provided, it is advisable for the patient to schedule a medical checkup every 3 months.\n\n### Reason for This Timing:\n1. **Age**: At 60 years old, the patient is at an increased risk for various health issues, including cardiovascular disease and diabetes. Regular checkups can help monitor these risks.\n  \n2. **High Systolic Blood Pressure**: A reading of 185 mmHg indicates hypertension, which requires close monitoring and management to prevent complications like heart disease or stroke.\n\n3. **Elevated Fasting Glucose**: A fasting glucose level of 140 mg/dL suggests the patient may be at risk for diabetes. Regular checkups will allow for monitoring of blood sugar levels and early intervention if necessary.\n\n4. **High Triglycerides**: With a level of 250 mg/dL, this can increase the risk of heart disease. Regular checkups can help manage and lower these levels through lifestyle changes or medications.\n\n5. **Increased BMI**: A BMI of 32 indicates obesity, which is a risk factor for many chronic conditions. Regular checkups can help track weight and provide guidance on healthy lifestyle changes.\n\nIn summary, coming in every 3 months will allow for timely monitoring and intervention, helping to manage these risk factors effectively.",
-        Recommendation:
-          "To help reduce your risk, focus on adopting a healthier lifestyle. Aim to maintain a balanced diet rich in fruits, vegetables, whole grains, and lean proteins while reducing sugar and saturated fats. Regular exercise, such as walking for at least 30 minutes most days, can also be beneficial. Additionally, monitor your blood pressure, glucose, and lipid levels regularly, and consider discussing medication or supplements with your healthcare provider if necessary. Lastly, ensure you have regular check-ups to keep track of your overall health.",
+      feedback:
+        "Based on the patient's high-risk status and the contributing factors you've provided, it is advisable for the patient to schedule a medical checkup every 3 months.\n\n### Reason for This Timing:\n1. **Age**: At 60 years old, the patient is at an increased risk for various health issues, including cardiovascular disease and diabetes. Regular checkups can help monitor these risks.\n  \n2. **High Systolic Blood Pressure**: A reading of 185 mmHg indicates hypertension, which requires close monitoring and management to prevent complications like heart disease or stroke.\n\n3. **Elevated Fasting Glucose**: A fasting glucose level of 140 mg/dL suggests the patient may be at risk for diabetes. Regular checkups will allow for monitoring of blood sugar levels and early intervention if necessary.\n\n4. **High Triglycerides**: With a level of 250 mg/dL, this can increase the risk of heart disease. Regular checkups can help manage and lower these levels through lifestyle changes or medications.\n\n5. **Increased BMI**: A BMI of 32 indicates obesity, which is a risk factor for many chronic conditions. Regular checkups can help track weight and provide guidance on healthy lifestyle changes.\n\nIn summary, coming in every 3 months will allow for timely monitoring and intervention, helping to manage these risk factors effectively.",
+      Recommendation:
+        "To help reduce your risk, focus on adopting a healthier lifestyle. Aim to maintain a balanced diet rich in fruits, vegetables, whole grains, and lean proteins while reducing sugar and saturated fats. Regular exercise, such as walking for at least 30 minutes most days, can also be beneficial. Additionally, monitor your blood pressure, glucose, and lipid levels regularly, and consider discussing medication or supplements with your healthcare provider if necessary. Lastly, ensure you have regular check-ups to keep track of your overall health.",
     },
   });
 
   const sendDataToIframe = () => {
     if (iframeRef.current?.contentWindow) {
-      iframeRef.current.contentWindow.postMessage(JSON.stringify(data), "*");
+      iframeRef.current.contentWindow.postMessage(JSON.stringify(data2), "*");
       console.log("📤 Sent health data to iframe");
     }
   };

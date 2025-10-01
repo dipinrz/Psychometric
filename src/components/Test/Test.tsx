@@ -15,6 +15,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { useState } from "react";
+import axios from "axios";
 
 const AnomalyDetectionAnalytics = () => {
   const [response, setResponse] = useState<any>(null);
@@ -23,7 +24,7 @@ const AnomalyDetectionAnalytics = () => {
   const [selectedFile, setSelectedFile] = useState<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null); // Added useRef
 
-   const handleFileUpload = async (event: any) => {
+  const handleFileUpload = async (event: any) => {
     const file = event.target.files[0];
     if (!file) return;
 
@@ -35,19 +36,19 @@ const AnomalyDetectionAnalytics = () => {
     formData.append("file", file);
 
     try {
-      const result = await fetch("http://51.112.148.129:8089/predict", {
-        method: "POST",
-        body: formData,
-      });
+      const result = await axios.post(
+        "http://51.112.148.129:8089/predict",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-      if (!result.ok) {
-        throw new Error(`HTTP error! status: ${result.status}`);
-      }
-
-      const data = await result.json();
-      setResponse(data);
+      setResponse(result.data);
     } catch (err: any) {
-      setError(err.message);
+      setError(err.response?.data?.message || err.message);
       console.error("Upload error:", err);
     } finally {
       setLoading(false);
@@ -153,7 +154,7 @@ const AnomalyDetectionAnalytics = () => {
                 )}
 
                 {!loading && (
-                  <button 
+                  <button
                     className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 flex items-center space-x-2"
                     type="button" // Added type="button" to prevent form submission behavior
                   >
@@ -692,10 +693,7 @@ const EntryDetails = ({ entry }: { entry: any }) => {
             <div className="space-y-2">
               {Object.entries(most_influential_original_feature).map(
                 ([key, value]: any) => (
-                  <div
-                    key={key}
-                    className="flex justify-between items-center"
-                  >
+                  <div key={key} className="flex justify-between items-center">
                     <span className="text-sm text-gray-700 font-medium">
                       {formatFeatureName(key)}:
                     </span>
@@ -724,9 +722,7 @@ const EntryDetails = ({ entry }: { entry: any }) => {
           </h2>
         </div>
 
-        <p className="text-gray-700 leading-relaxed mb-4">
-          {explanation}
-        </p>
+        <p className="text-gray-700 leading-relaxed mb-4">{explanation}</p>
 
         <div className="flex flex-wrap gap-4 text-sm">
           <div className="px-3 py-2 rounded-md bg-gray-50 border text-gray-800">
@@ -739,8 +735,7 @@ const EntryDetails = ({ entry }: { entry: any }) => {
                 : "bg-green-50 border-green-200 text-green-700"
             }`}
           >
-            <strong>Status:</strong>{" "}
-            {is_anomaly ? "Potential Fraud" : "Normal"}
+            <strong>Status:</strong> {is_anomaly ? "Potential Fraud" : "Normal"}
           </div>
           {most_influential_feature && (
             <div className="px-3 py-2 rounded-md bg-blue-50 border border-blue-200 text-blue-700">
