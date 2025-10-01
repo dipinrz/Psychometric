@@ -142,7 +142,7 @@ const FraudDetectionReport: React.FC<FraudDetectionReportProps> = ({
             </div>
           </div>
         </motion.div>
-<motion.div
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
@@ -196,8 +196,6 @@ const FraudDetectionReport: React.FC<FraudDetectionReportProps> = ({
             </div>
           </div>
         </motion.div>
-
-        
 
         {/* Metrics Grid */}
         <motion.div
@@ -403,7 +401,7 @@ const FraudDetectionReport: React.FC<FraudDetectionReportProps> = ({
           <div className="backdrop-blur-md bg-white/30 border border-white/40 rounded-xl p-4 inline-block shadow-lg">
             <p className="text-sm" style={{ color: "#424750" }}>
               AI-Powered Fraud Detection • Generated on{" "}
-              {new Date(report.generated_at).toLocaleDateString()}
+              {new Date().toLocaleDateString()}
             </p>
           </div>
         </motion.div>
