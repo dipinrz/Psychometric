@@ -15,6 +15,7 @@ import FraudDetectionDashboard from "./components/FraudDetection";
 import FraudDetectionDashboardAPI from "./components/FraudDetectionAPi";
 import FraudDetectionReport from "./components/Fraud";
 import AnomalyDetectionResults from "./components/Test/Test.tsx";
+import PsychometricTestAnalytics from "./components/Psycomatric.tsx";
 
 const healthMetrics = [
   {
@@ -192,12 +193,10 @@ function App() {
       <div>
         <Routes>
           {/* Default route */}
-          <Route
-            path="/"
-            element={<AnomalyDetectionResults/>}
-          />
+          <Route path="/" element={<AnomalyDetectionResults />} />
+          <Route path="/postmatric" element={<PsychometricTestAnalytics />} />
 
-           <Route
+          <Route
             path="/fraud"
             element={<FraudDetectionReport report={reportData} />}
           />
