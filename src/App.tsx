@@ -198,7 +198,7 @@ function App() {
           />
 
            <Route
-            path="/old"
+            path="/fraud"
             element={<FraudDetectionReport report={reportData} />}
           />
 
