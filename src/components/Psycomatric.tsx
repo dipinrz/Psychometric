@@ -97,7 +97,7 @@ const PsychometricTestAnalytics = () => {
           className="text-center mb-8"
         >
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Psychometric Risk Assessment
+            Mental Health Risk
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Upload your CSV file to analyze suicide risk predictions using
@@ -892,55 +892,55 @@ const PatientDetails = ({ patient }: { patient: any }) => {
       </div>
 
       {/* Feature Contributions */}
-     {Top_Feature_Contributions && (
-  <div className="lg:col-span-2">
-    <h4 className="font-semibold text-gray-800 mb-3">
-      Feature Contributions
-    </h4>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-      {Object.entries(Top_Feature_Contributions).map(
-        ([feature, value]: any) => {
-          // Simple fix: cap the progress at 100% and use logarithmic scaling
-          const absoluteValue = Math.abs(value);
-          const progressWidth = Math.min(absoluteValue * 50, 100); // Scale down large values
-          
-          return (
-            <div
-              key={feature}
-              className={`p-3 rounded-lg border ${
-                value > 0
-                  ? "bg-red-50 border-red-200"
-                  : "bg-green-50 border-green-200"
-              }`}
-            >
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-gray-900">
-                  {formatFeatureName(feature)}
-                </span>
-                <span
-                  className={`text-sm font-bold ${
-                    value > 0 ? "text-red-600" : "text-green-600"
-                  }`}
-                >
-                  {value > 0 ? "+" : ""}
-                  {value.toFixed(2)}
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    value > 0 ? "bg-red-500" : "bg-green-500"
-                  }`}
-                  style={{ width: `${progressWidth}%` }}
-                ></div>
-              </div>
-            </div>
-          );
-        }
+      {Top_Feature_Contributions && (
+        <div className="lg:col-span-2">
+          <h4 className="font-semibold text-gray-800 mb-3">
+            Feature Contributions
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {Object.entries(Top_Feature_Contributions).map(
+              ([feature, value]: any) => {
+                // Simple fix: cap the progress at 100% and use logarithmic scaling
+                const absoluteValue = Math.abs(value);
+                const progressWidth = Math.min(absoluteValue * 50, 100); // Scale down large values
+
+                return (
+                  <div
+                    key={feature}
+                    className={`p-3 rounded-lg border ${
+                      value > 0
+                        ? "bg-red-50 border-red-200"
+                        : "bg-green-50 border-green-200"
+                    }`}
+                  >
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-medium text-gray-900">
+                        {formatFeatureName(feature)}
+                      </span>
+                      <span
+                        className={`text-sm font-bold ${
+                          value > 0 ? "text-red-600" : "text-green-600"
+                        }`}
+                      >
+                        {value > 0 ? "+" : ""}
+                        {value.toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className={`h-2 rounded-full transition-all duration-300 ${
+                          value > 0 ? "bg-red-500" : "bg-green-500"
+                        }`}
+                        style={{ width: `${progressWidth}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                );
+              }
+            )}
+          </div>
+        </div>
       )}
-    </div>
-  </div>
-)}
 
       {/* Risk Assessment Summary */}
       <div className="lg:col-span-2">
